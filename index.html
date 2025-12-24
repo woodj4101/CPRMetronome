@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, maximum-scale=1">
+		<meta name="mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-status-bar-style" content="default">
+		<meta name="apple-mobile-web-app-title" content="CPR Metronome">
+		<title>CPR Metronome</title>
+	</head>
+	
+	<body>
+		<button id="start">Start CPR</button>
+		<button id="stop">Stop</button>
+		<script>
+			let audioCtx = null;
+
+			const bpm = 110;
+			const beatInterval = 60 / bpm; // seconds
+
+			let isRunning = false;
+			let nextNoteTime = 0;
+			let schedulerId = null;
+
+			// 얼마나 앞까지 예약할지 (초)
+			const scheduleAheadTime = 0.1;
+
+			// JS가 얼마나 자주 깨어날지 (ms)
+			const lookahead = 25;
+
+			function playClick(time) {
+				const osc = audioCtx.createOscillator();
+				const gain = audioCtx.createGain();
+
+				osc.type = "square";
+				osc.frequency.value = 1000;
+
+				gain.gain.setValueAtTime(0.3, time);
+				gain.gain.exponentialRampToValueAtTime(0.001, time + 0.05);
+
+				osc.connect(gain);
+				gain.connect(audioCtx.destination);
+
+				osc.start(time);
+				osc.stop(time + 0.05);
+			}
+
+			function scheduler() {
+				while (nextNoteTime < audioCtx.currentTime + scheduleAheadTime) {
+					playClick(nextNoteTime);
+					nextNoteTime += beatInterval;
+				}
+			}
+
+			function startMetronome() {
+				if (!audioCtx) {
+					audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+				}
+	
+				if (audioCtx.state === "suspended") {
+					audioCtx.resume();
+				}
+
+				if (isRunning) return;
+
+				isRunning = true;
+				nextNoteTime = audioCtx.currentTime + 0.05;
+
+				schedulerId = setInterval(scheduler, lookahead);
+			}
+
+			function stopMetronome() {
+				isRunning = false;
+				clearInterval(schedulerId);
+				schedulerId = null;
+			}
+
+			document.getElementById("start").addEventListener("click", startMetronome);
+			document.getElementById("stop").addEventListener("click", stopMetronome);
+		</script>
+	</body>
+</html>
