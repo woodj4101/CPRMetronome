@@ -77,7 +77,6 @@
 			}
 
 			function startMetronome() {
-				await requestWakeLock();
 				if (!audioCtx) {
 					audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 				}
@@ -92,13 +91,14 @@
 				nextNoteTime = audioCtx.currentTime + 0.05;
 
 				schedulerId = setInterval(scheduler, lookahead);
+				requestWakeLock();
 			}
 
 			function stopMetronome() {
-				await releaseWakeLock();
 				isRunning = false;
 				clearInterval(schedulerId);
 				schedulerId = null;
+				releaseWakeLock();
 			}
 
 			document.getElementById("start").addEventListener("click", startMetronome);
@@ -112,3 +112,4 @@
 	</body>
 
 </html>
+
