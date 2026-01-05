@@ -23,31 +23,44 @@
 			}
 
 			body, html {
+				margin: 0;
+				border: 0;
+				padding: 0;
 				height: 100%;
 				width: 100%;
 				justify-content: center;
 			}
 			
 			button {
-			  height: 100%;
-			  width: 100%;
-				color: #000000;
-				margin: 0;
+			  margin: 0;
 				border: 0;
 				padding: 0;
+				height: 100%;
+			  width: 100%;
+				color: #000000;
+				background-color: rgba(0, 0, 0, 0);
 				font-weight: bold;
 				cursor: pointer;
 			}
 			
+			button:active {
+				background-color: rgba(0, 0, 0, 0.15);
+			}
+			
+			button:active svg {
+				fill: rgba(0, 0, 0, 0.7);
+			}
+						
 			svg {
 				width: min(50vw, 50vh);
+				fill: rgba(0, 0, 0, 0.4);
 				stroke: transparent;
 				stroke-width: 0px;
 			}
 			
-			#startBtn { background-color: #7cfc00; }
+			.startColor { background-color: #7cfc00; }
 			
-			#stopBtn { background-color: #d13a44; }
+			.stopColor { background-color: #d13a44; }
 			
 			.hidden { display: none; }
 			
@@ -56,18 +69,20 @@
 		</style>
 	</head>
 	
-	<body>
+	<body id="background">
 		<button id="startBtn">
-			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="#556b2f"><path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393"/></svg>
+			<svg id="startIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393"/></svg>
 		</button>
 		<button id="stopBtn">
-			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="#800000"><path d="M6 3.5a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0V4a.5.5 0 0 1 .5-.5m4 0a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0V4a.5.5 0 0 1 .5-.5"/></svg>
+			<svg id="stopIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M6 3.5a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0V4a.5.5 0 0 1 .5-.5m4 0a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0V4a.5.5 0 0 1 .5-.5"/></svg>
 		</button>
 		<script>
 
+			const background = document.getElementById("background");
 			const startBtn = document.getElementById("startBtn");
 			const stopBtn = document.getElementById("stopBtn");
 			
+			background.classList.add("startColor");
 			stopBtn.classList.add("hidden");
 			
 			const bpm = 110;
@@ -138,11 +153,15 @@
 			
 			function updateBtn() {
 				if (isRunning) {
+					background.classList.remove("startColor");
+					background.classList.add("stopColor");
 					startBtn.classList.add("hidden");
 					stopBtn.classList.remove("hidden");
 				} else {
-					startBtn.classList.remove("hidden");
+					background.classList.remove("stopColor");
+					background.classList.add("startColor");
 					stopBtn.classList.add("hidden");
+					startBtn.classList.remove("hidden");
 				}
 			}
 			
@@ -205,20 +224,13 @@
 				}
 			});
 			
-			window.addEventListener('pagehide', () => {
-				if (audioCtx && isRunning) stopMetronome();
-			});
-			
-			window.addEventListener('pageshow', () => {
-				if (audioCtx && !isRunning) startMetronome();
-			});
-			
 		 window.addEventListener("load", () => {
 				notie.alert({
 					text: unmuteMsg,
-					time: 5
+					time: 4
 				});
 			});
+			
 		</script>
 		<script src="https://unpkg.com/notie"></script>
 	</body>
