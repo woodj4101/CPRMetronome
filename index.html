@@ -199,19 +199,15 @@
 			
 			startBtn.addEventListener("click", startMetronome);
 			stopBtn.addEventListener("click", stopMetronome);
-		document.addEventListener("visibilitychange", () => {
+			document.addEventListener("visibilitychange", () => {
 			  if (document.visibilityState === "visible" && isRunning) {
 					requestWakeLock();
 				}
 			});
 			
-			window.addEventListener('pagehide', () => {
-				stopMetronome();
-			});
+			window.addEventListener('pagehide', () => { if (isRunning) stopMetronome(); });
 			
-			window.addEventListener('pageshow', () => {
-				startMetronome();
-			});
+			window.addEventListener('pageshow', () => { if (!isRunning) startMetronome(); });
 			
 		 window.addEventListener("load", () => {
 				notie.alert({
