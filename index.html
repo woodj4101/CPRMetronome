@@ -205,9 +205,13 @@
 				}
 			});
 			
-			window.addEventListener('pagehide', () => { if (isRunning) stopMetronome(); });
+			window.addEventListener('pagehide', () => {
+				if (audioCtx && isRunning) stopMetronome();
+			});
 			
-			window.addEventListener('pageshow', () => { if (!isRunning) startMetronome(); });
+			window.addEventListener('pageshow', () => {
+				if (audioCtx && !isRunning) startMetronome();
+			});
 			
 		 window.addEventListener("load", () => {
 				notie.alert({
