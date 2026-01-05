@@ -7,6 +7,7 @@
 		<meta name="apple-mobile-web-status-bar-style" content="default">
 		<meta name="apple-mobile-web-app-title" content="CPR Metronome">
 		<title>CPR Metronome</title>
+		<link rel="stylesheet" type="text/css" href="https://unpkg.com/notie/dist/notie.min.css">
 		<style>
 
 			* {
@@ -16,7 +17,8 @@
 				box-sizing: border-box;
 				text-align: center;
 				font-family: 'Noto Sans KR', sans-serif;
-				font-size: 3.5vw;
+				font-size: 5vw;
+				font-weight: bold;
 				user-select: none;
 			}
 
@@ -30,7 +32,9 @@
 			  height: 100%;
 			  width: 100%;
 				color: #000000;
-				border: 0px;
+				margin: 0;
+				border: 0;
+				padding: 0;
 				font-weight: bold;
 				cursor: pointer;
 			}
@@ -46,6 +50,8 @@
 			#stopBtn { background-color: #d13a44; }
 			
 			.hidden { display: none; }
+			
+			.notie-container { box-shadow: none; }
 			
 		</style>
 	</head>
@@ -67,6 +73,34 @@
 			const bpm = 110;
 			const beatInterval = 60 / bpm; // seconds
 
+			const userLang = navigator.language || navigator.userLanguage; 
+			
+			const unmute = {
+				"en": "Please disable silent mode",
+				"ko": "무음 모드를 해제해 주세요",
+				"zh": "请关闭静音模式",
+				"ja": "サイレントモードを解除してください",
+				"es": "Por favor, desactive el modo silencio",
+				"fr": "Veuillez désactiver le mode silencieux",
+				"de": "Bitte deaktivieren Sie den Stummmodus",
+				"pt": "Por favor, desative o modo silencioso",
+				"it": "Disattivi la modalità silenziosa, per favore",
+				"ru": "Пожалуйста, отключите режим без звука",
+				"ar": "يرجى تعطيل وضع الصامت",
+				"hi": "कृपया साइलेंट मोड बंद करें",
+				"bn": "নীরব মোড বন্ধ করুন",
+				"tr": "Lütfen sessiz modu kapatınız",
+				"vi": "Vui lòng tắt chế độ im lặng",
+				"th": "กรุณาปิดโหมดเงียบ",
+				"id": "Silakan nonaktifkan mode senyap",
+				"pl": "Proszę wyłączyć tryb cichy",
+				"nl": "Schakel alstublieft de stille modus uit",
+				"sv": "Var vänlig inaktivera tyst läge"
+			};
+
+			const langCode = userLang.slice(0,2);
+			const unmuteMsg = unmute[langCode] || unmute["en"];
+			
 			let audioCtx = null;
 			
 			let isRunning = false;
@@ -169,7 +203,19 @@
 			  if (document.visibilityState === "visible" && isRunning) {
 					requestWakeLock();
 				}
+				if (isRunning && audioCtx.state === "suspended") {
+					isRunning = false;
+					updateBtn();
+				}
+			});
+			
+		 window.addEventListener("load", () => {
+				notie.alert({
+					text: unmuteMsg,
+					time: 5
+				});
 			});
 		</script>
+		<script src="https://unpkg.com/notie"></script>
 	</body>
 </html>
