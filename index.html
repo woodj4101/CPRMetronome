@@ -7,7 +7,8 @@
 		<meta name="apple-mobile-web-status-bar-style" content="default">
 		<meta name="apple-mobile-web-app-title" content="CPR Metronome">
 		<title>CPR Metronome</title>
-		<link rel="stylesheet" type="text/css" href="https://unpkg.com/notie/dist/notie.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.0/animate.min.css">
+		
 		<style>
 
 			* {
@@ -19,6 +20,7 @@
 				font-family: 'Noto Sans KR', sans-serif;
 				font-size: 5vw;
 				font-weight: bold;
+				color: black;
 				user-select: none;
 			}
 
@@ -47,26 +49,56 @@
 				background-color: rgba(0, 0, 0, 0.15);
 			}
 			
-			button:active svg {
-				fill: rgba(0, 0, 0, 0.7);
-			}
-						
 			svg {
-				width: min(50vw, 50vh);
-				fill: rgba(0, 0, 0, 0.4);
 				stroke: transparent;
 				stroke-width: 0px;
 			}
 			
-			.startColor { background-color: #7cfc00; }
+			button svg {
+				width: min(50vw, 50vh);
+				fill: rgba(0, 0, 0, 0.4);
+			}
 			
-			.stopColor { background-color: #d13a44; }
+			button:active svg {
+				fill: rgba(0, 0, 0, 0.7);
+			}
 			
-			.hidden { display: none; }
+			#volumeIconSection {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
 			
-			.notie-container { box-shadow: none; }
+			#volumeIconSection svg {
+				width: min(30vw, 30vh);
+			}
+			
+			#muteIcon {
+				fill: lightcoral;
+			}
+			
+			#unmuteIcon {
+				fill: lightblue;
+			}
+			
+			.startColor {
+				background-color: #7cfc00;
+			}
+			
+			.stopColor {
+				background-color: #d13a44;
+			}
+			
+			.hidden {
+				display: none;
+			}
+			
+			.notie-container {
+				box-shadow: none;
+			}
 			
 		</style>
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	</head>
 	
 	<body id="background">
@@ -77,13 +109,13 @@
 			<svg id="stopIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M6 3.5a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0V4a.5.5 0 0 1 .5-.5m4 0a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0V4a.5.5 0 0 1 .5-.5"/></svg>
 		</button>
 		<script>
-
+			
 			const background = document.getElementById("background");
 			const startBtn = document.getElementById("startBtn");
 			const stopBtn = document.getElementById("stopBtn");
-			
-			background.classList.add("startColor");
-			stopBtn.classList.add("hidden");
+						
+			background.classList.toggle("startColor");
+			stopBtn.classList.toggle("hidden");
 			
 			const bpm = 110;
 			const beatInterval = 60 / bpm; // seconds
@@ -152,17 +184,10 @@
 			}
 			
 			function updateBtn() {
-				if (isRunning) {
-					background.classList.remove("startColor");
-					background.classList.add("stopColor");
-					startBtn.classList.add("hidden");
-					stopBtn.classList.remove("hidden");
-				} else {
-					background.classList.remove("stopColor");
-					background.classList.add("startColor");
-					stopBtn.classList.add("hidden");
-					startBtn.classList.remove("hidden");
-				}
+				background.classList.toggle("startColor");
+				background.classList.toggle("stopColor");
+					startBtn.classList.toggle("hidden");
+					stopBtn.classList.toggle("hidden");
 			}
 			
 			function playClick(time) {
@@ -224,14 +249,51 @@
 				}
 			});
 			
-		 window.addEventListener("load", () => {
-				notie.alert({
-					text: unmuteMsg,
-					time: 4
-				});
+		 document.addEventListener("DOMContentLoaded", () => {
+			 
+			 let volumeIconInterval;
+			 Swal.fire({
+				html: `
+					<div id="volumeIconSection">
+				  <svg id="muteIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M6.717 3.55A.5.5 0 0 1 7 4v8a.5.5 0 0 1-.812.39L3.825 10.5H1.5A.5.5 0 0 1 1 10V6a.5.5 0 0 1 .5-.5h2.325l2.363-1.89a.5.5 0 0 1 .529-.06m7.137 2.096a.5.5 0 0 1 0 .708L12.207 8l1.647 1.646a.5.5 0 0 1-.708.708L11.5 8.707l-1.646 1.647a.5.5 0 0 1-.708-.708L10.793 8 9.146 6.354a.5.5 0 1 1 .708-.708L11.5 7.293l1.646-1.647a.5.5 0 0 1 .708 0"/></svg>
+					<svg id="unmuteIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M11.536 14.01A8.47 8.47 0 0 0 14.026 8a8.47 8.47 0 0 0-2.49-6.01l-.708.707A7.48 7.48 0 0 1 13.025 8c0 2.071-.84 3.946-2.197 5.303z"/><path d="M10.121 12.596A6.48 6.48 0 0 0 12.025 8a6.48 6.48 0 0 0-1.904-4.596l-.707.707A5.48 5.48 0 0 1 11.025 8a5.48 5.48 0 0 1-1.61 3.89z"/><path d="M8.707 11.182A4.5 4.5 0 0 0 10.025 8a4.5 4.5 0 0 0-1.318-3.182L8 5.525A3.5 3.5 0 0 1 9.025 8 3.5 3.5 0 0 1 8 10.475zM6.717 3.55A.5.5 0 0 1 7 4v8a.5.5 0 0 1-.812.39L3.825 10.5H1.5A.5.5 0 0 1 1 10V6a.5.5 0 0 1 .5-.5h2.325l2.363-1.89a.5.5 0 0 1 .529-.06"/></svg>
+						</div><br><b>
+				` + unmuteMsg + '</b>',
+				showClass: {
+					popup: `
+					  animate__animated
+						animate__fadeInUp
+						animate__faster
+					`
+				},
+				hideClass: {
+					popup: `
+					  animate__animated
+						animate__fadeOutDown
+						animate__faster
+					`
+				},
+				didOpen: () => {
+					let muteIcon = document.getElementById("muteIcon");
+					let unmuteIcon = document.getElementById("unmuteIcon");
+					unmuteIcon.classList.toggle("hidden");
+					volumeIconInterval = setInterval(() => {
+						muteIcon.classList.toggle("hidden"); unmuteIcon.classList.toggle("hidden");
+					}, 1000);
+				},
+				willClose: () => {
+					clearInterval(volumeIconInterval);
+				},
+				color: "#000000",
+				heightAuto: false,
+				scrollbarPadding: false,
+				showCancelButton: false,
+				showConfirmButton: false,
+				timer: 6000
 			});
+		});
 			
 		</script>
 		<script src="https://unpkg.com/notie"></script>
-	</body>
+		</body>
 </html>
