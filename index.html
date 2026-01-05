@@ -203,10 +203,14 @@
 			  if (document.visibilityState === "visible" && isRunning) {
 					requestWakeLock();
 				}
-				if (isRunning && audioCtx.state === "suspended") {
-					isRunning = false;
-					updateBtn();
-				}
+			});
+			
+			window.addEventListener('pagehide', () => {
+				stopMetronome();
+			});
+			
+			window.addEventListener('pageshow', () => {
+				startMetronome();
 			});
 			
 		 window.addEventListener("load", () => {
