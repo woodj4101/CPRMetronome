@@ -7,17 +7,68 @@
 		<meta name="apple-mobile-web-status-bar-style" content="default">
 		<meta name="apple-mobile-web-app-title" content="CPR Metronome">
 		<title>CPR Metronome</title>
+		<style>
+
+			* {
+				margin: 0;
+				border: 0;
+				padding: 0;
+				box-sizing: border-box;
+				text-align: center;
+				font-family: 'Noto Sans KR', sans-serif;
+				font-size: 3.5vw;
+				user-select: none;
+			}
+
+			body, html {
+				height: 100%;
+				width: 100%;
+				justify-content: center;
+			}
+			
+			button {
+			  height: 100%;
+			  width: 100%;
+				color: #000000;
+				border: 0px;
+				font-weight: bold;
+				cursor: pointer;
+			}
+			
+			svg {
+				width: min(50vw, 50vh);
+				stroke: transparent;
+				stroke-width: 0px;
+			}
+			
+			#startBtn { background-color: #7cfc00; }
+			
+			#stopBtn { background-color: #d13a44; }
+			
+			.hidden { display: none; }
+			
+		</style>
 	</head>
 	
 	<body>
-		<button id="start">Start CPR</button>
-		<button id="stop">Stop</button>
+		<button id="startBtn">
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="#556b2f"><path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393"/></svg>
+		</button>
+		<button id="stopBtn">
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="#800000"><path d="M6 3.5a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0V4a.5.5 0 0 1 .5-.5m4 0a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0V4a.5.5 0 0 1 .5-.5"/></svg>
+		</button>
 		<script>
-			let audioCtx = null;
 
+			const startBtn = document.getElementById("startBtn");
+			const stopBtn = document.getElementById("stopBtn");
+			
+			stopBtn.classList.add("hidden");
+			
 			const bpm = 110;
 			const beatInterval = 60 / bpm; // seconds
 
+			let audioCtx = null;
+			
 			let isRunning = false;
 			let nextNoteTime = 0;
 			let schedulerId = null;
@@ -48,6 +99,16 @@
 					await wakeLock.release();
 					wakeLock = null;
 					console.log("Wake Lock released");
+				}
+			}
+			
+			function updateBtn() {
+				if (isRunning) {
+					startBtn.classList.add("hidden");
+					stopBtn.classList.remove("hidden");
+				} else {
+					startBtn.classList.remove("hidden");
+					stopBtn.classList.add("hidden");
 				}
 			}
 			
@@ -91,6 +152,7 @@
 
 				schedulerId = setInterval(scheduler, lookahead);
 				requestWakeLock();
+				updateBtn();
 			}
 
 			function stopMetronome() {
@@ -98,23 +160,16 @@
 				clearInterval(schedulerId);
 				schedulerId = null;
 				releaseWakeLock();
+				updateBtn();
 			}
-
-			document.getElementById("start").addEventListener("click", startMetronome);
-			document.getElementById("stop").addEventListener("click", stopMetronome);
-			document.addEventListener("visibilitychange", () => {
-				if (document.visibilityState === "visible" && isRunning) {
+			
+			startBtn.addEventListener("click", startMetronome);
+			stopBtn.addEventListener("click", stopMetronome);
+		document.addEventListener("visibilitychange", () => {
+			  if (document.visibilityState === "visible" && isRunning) {
 					requestWakeLock();
 				}
 			});
-			document.addEventListener("DOMContentLoaded", startMetronome);
 		</script>
 	</body>
 </html>
-
-
-
-
-
-
-
