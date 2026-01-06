@@ -7,8 +7,8 @@
 		<meta name="apple-mobile-web-status-bar-style" content="default">
 		<meta name="apple-mobile-web-app-title" content="CPR Metronome">
 		<title>CPR Metronome</title>
+		<link rel="stylesheet" type="text/css" href="https://unpkg.com/notie/dist/notie.min.css">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.0/animate.min.css">
-		
 		<style>
 
 			* {
@@ -18,9 +18,6 @@
 				box-sizing: border-box;
 				text-align: center;
 				font-family: 'Noto Sans KR', sans-serif;
-				font-size: 5vw;
-				font-weight: bold;
-				color: black;
 				user-select: none;
 			}
 
@@ -33,34 +30,68 @@
 				justify-content: center;
 			}
 			
-			button {
-			  margin: 0;
-				border: 0;
-				padding: 0;
-				height: 100%;
-			  width: 100%;
-				color: #000000;
-				background-color: rgba(0, 0, 0, 0);
-				font-weight: bold;
-				cursor: pointer;
-			}
-			
-			button:active {
-				background-color: rgba(0, 0, 0, 0.15);
-			}
-			
 			svg {
 				stroke: transparent;
 				stroke-width: 0px;
 			}
 			
-			button svg {
-				width: min(50vw, 50vh);
-				fill: rgba(0, 0, 0, 0.4);
+			.mainSection {
+				margin: 0;
+				border: 0;
+				padding: 0;
+				height: 100%;
+				width: 100%;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				position: relative;
 			}
 			
-			button:active svg {
+			.mainSection button {
+				margin: 0;
+				border: 0;
+				padding: 0;
+				height: 100%;
+			  width: 100%;
+				background-color: rgba(0, 0, 0, 0);
+				cursor: pointer;
+				position: absolute;
+			}
+			
+			.mainSection button:active {
+				background-color: rgba(0, 0, 0, 0.15);
+			}
+			
+			.mainSection button svg {
+				width: min(40vw, 40vh);
+				fill: rgba(0, 0, 0, 0.4);
+				transform: translateY(92%);
+			}
+			
+			.mainSection button:active svg {
 				fill: rgba(0, 0, 0, 0.7);
+			}
+			
+			#bpmLabel {
+				color: rgba(0, 0, 0, 0.35);
+				font-size: min(10vw, 10vh);
+			}
+			
+			.swal2-popup {
+				font-size: min(5vw, 5vh) !important;
+			}
+			
+			#handIcon {
+				width: min(90vw, 90vh);
+			}
+			
+			.handOn {
+				fill: rgba(0, 0, 0, 0.5);
+			}
+			
+			.handFlash {
+				fill: yellow;
 			}
 			
 			#volumeIconSection {
@@ -98,24 +129,32 @@
 			}
 			
 		</style>
-		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-	</head>
+		</head>
 	
 	<body id="background">
-		<button id="startBtn">
-			<svg id="startIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393"/></svg>
-		</button>
-		<button id="stopBtn">
-			<svg id="stopIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M6 3.5a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0V4a.5.5 0 0 1 .5-.5m4 0a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0V4a.5.5 0 0 1 .5-.5"/></svg>
-		</button>
+		<div class="mainSection">
+			
+			<a id="bpmLabel"><b>110 BPM</b></a>
+			<br>
+			<svg id="handIcon" fill="rgba(0, 0, 0, 0.2)" viewBox="0 0 1064 1286" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"><g transform="matrix(13.8889,0,0,13.8889,874.982,844.448)"><path d="M0,-16.599C-0.518,-12.325 -3.063,-8.286 -6.809,-5.796C-8.031,-4.983 -9.056,-4.564 -10.035,-4.476C-11.113,-4.37 -12.205,-4.786 -12.615,-5.447C-13.108,-6.243 -12.782,-7.409 -11.559,-9.225L-5.623,-18.039C-4.139,-20.244 -3.014,-20.793 -2.184,-20.793C-1.863,-20.793 -1.587,-20.711 -1.35,-20.611C0.091,-20 0.178,-18.092 0,-16.599M-10.962,-29.298L-12.667,-20.26C-13.19,-17.488 -13.777,-15.067 -15.658,-13.519C-16.66,-12.696 -18.325,-12.183 -19.432,-12.845C-20.223,-13.319 -20.611,-14.276 -20.732,-16.044C-21.022,-20.297 -20.728,-24.58 -19.859,-28.773C-19.449,-30.748 -18.944,-32.298 -17.807,-33.442L-17.807,-33.443C-17.009,-34.247 -15.486,-34.854 -14.143,-34.854C-13.607,-34.854 -13.101,-34.757 -12.681,-34.539C-10.534,-33.42 -10.682,-30.775 -10.962,-29.298M-26.725,-29.781L-27.38,-16.328C-27.486,-14.168 -28.107,-13.707 -28.564,-13.549C-29.05,-13.383 -29.733,-13.529 -30.266,-13.91C-30.864,-14.341 -31.297,-15.013 -31.655,-15.609C-34.276,-19.964 -35.667,-24.879 -35.679,-29.825L-35.679,-29.826C-35.685,-32.325 -34.734,-36.595 -31.13,-36.751C-31.054,-36.755 -30.98,-36.756 -30.907,-36.756C-29.882,-36.756 -29.061,-36.434 -28.406,-35.775C-27.017,-34.378 -26.633,-31.673 -26.725,-29.781M-41.612,-21.722C-39.787,-18.177 -38.316,-14.462 -37.239,-10.68C-36.632,-8.555 -36.733,-7.217 -37.556,-6.467C-38.382,-5.718 -39.987,-5.64 -41.289,-6.289C-42.624,-6.953 -43.569,-8.164 -44.391,-9.375C-46.54,-12.54 -48.125,-15.972 -49.099,-19.58L-49.097,-19.58C-49.524,-21.157 -50.168,-24.937 -46.981,-25.942C-44.716,-26.656 -42.807,-24.045 -41.612,-21.722M-49.389,-5.543C-48.323,-5.349 -47.627,-4.135 -47.513,-3.091C-47.371,-1.791 -47.813,-0.458 -48.318,0.907C-49.223,3.355 -49.2,5.081 -49.17,7.264L-49.161,8.137C-49.156,9.044 -49.363,9.286 -50.214,9.375C-53.013,9.679 -55.051,6.058 -55.421,3.455C-55.864,0.323 -54.332,-3.087 -51.696,-4.837C-51.089,-5.243 -50.182,-5.696 -49.389,-5.543M13.327,-27.993C13.117,-29.013 12.593,-29.846 11.852,-30.339C10.957,-30.936 9.945,-31.117 8.925,-30.861C5.811,-30.082 3.144,-25.541 0.887,-21.334C0.492,-21.801 0.01,-22.177 -0.58,-22.427C-0.702,-22.478 -0.823,-22.5 -0.945,-22.54L1.659,-40.36C1.965,-42.455 2.312,-44.829 1.558,-47.101C0.796,-49.399 -1.491,-51.627 -4.235,-51.22C-7.171,-50.787 -8.706,-47.56 -9.21,-46.499C-10.713,-43.342 -11.813,-40.006 -12.525,-36.578C-13.827,-36.977 -15.342,-36.841 -16.683,-36.361L-18.428,-47.506C-18.549,-48.276 -18.635,-49.072 -18.722,-49.877C-19.025,-52.659 -19.339,-55.536 -20.998,-57.952C-22.193,-59.691 -24.49,-61.217 -26.904,-60.697C-31.477,-59.723 -31.011,-55.071 -30.704,-51.993C-30.656,-51.521 -30.61,-51.067 -30.583,-50.649L-29.815,-38.617C-30.261,-38.697 -30.723,-38.742 -31.215,-38.722C-32.452,-38.669 -33.492,-38.282 -34.359,-37.671C-34.858,-39.521 -35.427,-41.448 -36.085,-43.514C-36.253,-44.04 -36.391,-44.563 -36.529,-45.079C-36.937,-46.615 -37.36,-48.203 -38.456,-49.696C-39.585,-51.234 -41.147,-52.187 -42.742,-52.309C-44.541,-52.457 -46.376,-51.536 -47.552,-49.933C-48.49,-48.652 -49.009,-46.958 -49.052,-45.035C-49.104,-42.811 -48.69,-40.534 -48.289,-38.332C-48.152,-37.574 -48.016,-36.824 -47.902,-36.089C-47.481,-33.389 -46.914,-30.693 -46.255,-28.039C-46.728,-28.03 -47.172,-27.95 -47.574,-27.823C-48.817,-27.431 -49.707,-26.753 -50.317,-25.901C-52.442,-29.03 -56.394,-34.093 -60.574,-31.433C-61.687,-30.724 -62.511,-29.477 -62.83,-28.012C-63.072,-26.907 -63.054,-25.7 -62.774,-24.214C-62.287,-21.637 -61.086,-19.53 -59.924,-17.493C-59.503,-16.752 -59.077,-16.006 -58.68,-15.227C-57.075,-12.082 -55.324,-8.964 -53.486,-5.938C-56.33,-3.658 -57.886,0.106 -57.373,3.732C-56.956,6.684 -54.808,10.724 -51.378,11.292C-51.182,11.961 -50.981,12.607 -50.776,13.231C-50.361,14.494 -50.414,14.322 -50.13,15.088C-49.101,17.867 -47.948,20.212 -46.593,22.267C-44.234,25.851 -41.24,28.546 -37.891,30.144C-37.297,30.428 -36.976,30.556 -36.925,30.578C-36.872,30.601 -36.505,30.744 -35.882,30.949C-34.247,31.487 -32.569,31.77 -30.922,31.77C-28.48,31.77 -26.111,31.182 -24.08,30.018C-23.607,29.749 -23.444,29.145 -23.715,28.673C-23.985,28.201 -24.586,28.034 -25.061,28.308C-28.225,30.119 -32.374,30.289 -36.158,28.768C-40.426,27.047 -43.293,23.693 -44.947,21.182C-46.7,18.522 -48.106,15.325 -49.345,11.21C-48.242,10.92 -47.177,10.13 -47.189,8.126L-47.199,7.238C-47.227,5.105 -47.245,3.695 -46.468,1.592C-45.901,0.06 -45.364,-1.579 -45.553,-3.304C-45.743,-5.046 -46.914,-7.097 -49.034,-7.484C-49.915,-7.647 -50.855,-7.49 -51.834,-7.023C-53.635,-9.988 -55.35,-13.041 -56.923,-16.124C-57.334,-16.93 -57.775,-17.703 -58.211,-18.469C-59.343,-20.453 -60.41,-22.327 -60.835,-24.58C-61.065,-25.797 -61.086,-26.754 -60.904,-27.59C-60.695,-28.546 -60.189,-29.34 -59.516,-29.768C-56.852,-31.465 -53.862,-27.709 -51.293,-23.813L-51.24,-23.732C-51.555,-22.251 -51.414,-20.592 -51.003,-19.066L-51.002,-19.066C-49.972,-15.247 -48.296,-11.612 -46.022,-8.266C-45.096,-6.903 -43.914,-5.392 -42.168,-4.522C-41.37,-4.127 -40.392,-3.889 -39.412,-3.889C-38.256,-3.889 -37.098,-4.219 -36.23,-5.008C-34.335,-6.73 -34.816,-9.379 -35.341,-11.221C-36.454,-15.127 -37.974,-18.964 -39.857,-22.625C-41.286,-25.399 -42.753,-26.853 -44.11,-27.533C-44.866,-30.441 -45.489,-33.419 -45.952,-36.392C-46.069,-37.143 -46.209,-37.91 -46.349,-38.685C-46.732,-40.789 -47.127,-42.966 -47.08,-44.989C-47.057,-46.048 -46.842,-47.563 -45.961,-48.767C-45.197,-49.809 -43.98,-50.428 -42.893,-50.343C-41.872,-50.264 -40.835,-49.603 -40.046,-48.529C-39.17,-47.336 -38.813,-45.993 -38.435,-44.572C-38.289,-44.025 -38.142,-43.473 -37.965,-42.915C-37.179,-40.447 -36.525,-38.186 -35.965,-36.015C-37.114,-34.325 -37.657,-32.059 -37.651,-29.82C-37.64,-24.519 -36.15,-19.252 -33.345,-14.592C-32.852,-13.771 -32.277,-12.927 -31.416,-12.308C-30.687,-11.785 -29.827,-11.508 -29.006,-11.508C-28.63,-11.508 -28.262,-11.566 -27.92,-11.684C-25.593,-12.49 -25.455,-15.307 -25.41,-16.233L-24.755,-29.684C-24.698,-30.85 -24.691,-34.836 -27.008,-37.166C-27.25,-37.41 -27.515,-37.614 -27.788,-37.8L-28.616,-50.775C-28.643,-51.215 -28.69,-51.692 -28.74,-52.19C-29.091,-55.687 -29.133,-58.205 -26.493,-58.768C-24.966,-59.091 -23.42,-57.993 -22.624,-56.835C-21.246,-54.829 -20.959,-52.203 -20.683,-49.664C-20.593,-48.828 -20.502,-48.001 -20.378,-47.201L-18.53,-35.404C-18.778,-35.224 -19.006,-35.034 -19.206,-34.833C-20.773,-33.256 -21.374,-31.181 -21.79,-29.174C-22.697,-24.805 -23.002,-20.342 -22.699,-15.911C-22.588,-14.257 -22.231,-12.221 -20.447,-11.153C-19.777,-10.751 -19.023,-10.577 -18.259,-10.577C-16.855,-10.577 -15.417,-11.166 -14.405,-11.996C-11.817,-14.123 -11.188,-17.459 -10.728,-19.895L-9.023,-28.932C-8.48,-31.804 -9.11,-34.139 -10.73,-35.558C-10.059,-39.051 -8.956,-42.447 -7.43,-45.652C-6.361,-47.897 -5.222,-49.081 -3.948,-49.268C-2.345,-49.512 -0.821,-48.003 -0.315,-46.48C0.292,-44.651 -0.018,-42.523 -0.293,-40.645L-2.918,-22.682C-4.405,-22.391 -5.858,-21.221 -7.26,-19.14L-13.195,-10.327C-13.937,-9.225 -15.675,-6.644 -14.292,-4.409C-13.454,-3.057 -11.781,-2.49 -10.336,-2.49C-10.173,-2.49 -10.013,-2.497 -9.856,-2.511C-8.126,-2.667 -6.666,-3.523 -5.717,-4.153C-1.496,-6.96 1.373,-11.524 1.958,-16.363C2.08,-17.376 2.049,-18.28 1.899,-19.08C2.089,-19.407 2.324,-19.842 2.607,-20.369C3.99,-22.948 6.867,-28.313 9.404,-28.948C9.887,-29.069 10.321,-28.99 10.758,-28.698C11.059,-28.496 11.292,-28.094 11.396,-27.594C11.884,-25.23 11.451,-22.646 11.034,-20.146L10.839,-18.961C10.257,-15.289 9.513,-11.704 8.63,-8.306C6.886,-1.61 4.531,5.028 2.246,11.204C1.036,14.472 -0.308,17.919 -2.265,20.98C-4.355,24.25 -6.955,26.687 -9.788,28.032C-13.062,29.584 -16.71,29.667 -19.552,28.257C-20.039,28.014 -20.632,28.214 -20.873,28.702C-21.115,29.19 -20.916,29.781 -20.428,30.024C-18.808,30.828 -16.977,31.228 -15.091,31.228C-14.679,31.228 -14.264,31.195 -13.848,31.157C-13.601,31.134 -12.839,31.025 -12.681,30.998C-12.5,30.966 -12.042,30.877 -11.777,30.812C-10.817,30.578 -9.865,30.252 -8.943,29.814C-5.775,28.31 -2.892,25.624 -0.604,22.044C1.199,19.224 2.477,16.158 3.604,13.182C4.186,11.644 3.694,12.968 4.315,11.286C6.55,5.231 8.83,-1.244 10.538,-7.809C11.438,-11.268 12.196,-14.917 12.788,-18.652L12.979,-19.821C13.428,-22.499 13.89,-25.269 13.327,-27.993" style="fill-rule:nonzero;"/></g></svg>
+			
+			<button id="switchBtn">
+				<svg id="startIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393"/></svg>
+				<svg id="stopIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M6 3.5a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0V4a.5.5 0 0 1 .5-.5m4 0a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0V4a.5.5 0 0 1 .5-.5"/></svg>
+			</button>
+			
+		</div>
+		
 		<script>
 			
 			const background = document.getElementById("background");
-			const startBtn = document.getElementById("startBtn");
-			const stopBtn = document.getElementById("stopBtn");
+			const startIcon = document.getElementById("startIcon");
+			const stopIcon = document.getElementById("stopIcon");
+			const handIcon = document.getElementById("handIcon");
+			const switchBtn = document.getElementById("switchBtn");
 						
 			background.classList.toggle("startColor");
-			stopBtn.classList.toggle("hidden");
+			stopIcon.classList.toggle("hidden");
 			
 			const bpm = 110;
 			const beatInterval = 60 / bpm; // seconds
@@ -144,9 +183,33 @@
 				"nl": "Schakel alstublieft de stille modus uit",
 				"sv": "Var vänlig inaktivera tyst läge"
 			};
+			
+			const refresh = {
+				"en": "An error occurred.<br>Please refresh the page.",
+				"ko": "오류가 발생했습니다.<br>페이지를 새로고침해 주세요.",
+				"zh": "发生错误。<br>请刷新页面。",
+				"ja": "エラーが発生しました。<br>ページを更新してください。",
+				"es": "Se produjo un error.<br>Por favor, actualice la página.",
+				"fr": "Une erreur est survenue.<br>Veuillez actualiser la page.",
+				"de": "Ein Fehler ist aufgetreten.<br>Bitte laden Sie die Seite neu.",
+				"pt": "Ocorreu um erro.<br>Por favor, atualize a página.",
+				"it": "Si è verificato un errore.<br>Per favore, ricarichi la pagina.",
+				"ru": "Произошла ошибка.<br>Пожалуйста, обновите страницу.",
+				"ar": "حدث خطأ.<br>يرجى تحديث الصفحة.",
+				"hi": "त्रुटि हुई।<br>कृपया पृष्ठ को रिफ्रेश करें।",
+				"bn": "ত্রুটি ঘটেছে।<br>অনুগ্রহ করে পৃষ্ঠা রিফ্রেশ করুন।",
+				"tr": "Bir hata oluştu.<br>Lütfen sayfayı yenileyin.",
+				"vi": "Đã xảy ra lỗi.<br>Vui lòng làm mới trang.",
+				"th": "เกิดข้อผิดพลาด<br>กรุณารีเฟรชหน้า",
+				"id": "Terjadi kesalahan.<br>Silakan muat ulang halaman.",
+				"pl": "Wystąpił błąd.<br>Proszę odświeżyć stronę.",
+				"nl": "Er is een fout opgetreden.<br>Vernieuw de pagina alstublieft.",
+				"sv": "Ett fel har inträffat.<br>Vänligen uppdatera sidan."
+			};
 
 			const langCode = userLang.slice(0,2);
 			const unmuteMsg = unmute[langCode] || unmute["en"];
+			const refreshMsg = refresh[langCode] || refresh["en"];
 			
 			let audioCtx = null;
 			
@@ -162,6 +225,18 @@
 
 			let wakeLock = null;
 
+			function setupAudioStateListener() {
+				if (!audioCtx) return;
+
+				audioCtx.onstatechange = () => {
+					console.log("AudioContext state:", audioCtx.state);
+					
+					if (audioCtx.state !== "running" && isRunning) {
+						handleAudioBlocked();
+					}
+				};
+			}
+			
 			async function requestWakeLock() {
 				try {
 					if ("wakeLock" in navigator) {
@@ -183,13 +258,6 @@
 				}
 			}
 			
-			function updateBtn() {
-				background.classList.toggle("startColor");
-				background.classList.toggle("stopColor");
-					startBtn.classList.toggle("hidden");
-					stopBtn.classList.toggle("hidden");
-			}
-			
 			function playClick(time) {
 				const osc = audioCtx.createOscillator();
 				const gain = audioCtx.createGain();
@@ -206,21 +274,45 @@
 				osc.start(time);
 				osc.stop(time + 0.05);
 			}
+			
+			function toggleFlash() {
+				if (isRunning) {
+					handIcon.classList.add("handFlash");
+					handIcon.classList.remove("handOn");
+					setTimeout(() => {
+						handIcon.classList.remove("handFlash");
+						handIcon.classList.add("handOn");
+					}, 25);
+				}
+			}
+			
+			function flashHand(time) {
+				const delay = Math.max(
+				  (time - audioCtx.currentTime) * 1000,
+				  0
+				);
+
+				setTimeout(toggleFlash, delay);
+			}
 
 			function scheduler() {
 				while (nextNoteTime < audioCtx.currentTime + scheduleAheadTime) {
 					playClick(nextNoteTime);
+					flashHand(nextNoteTime);
 					nextNoteTime += beatInterval;
 				}
 			}
 
-			function startMetronome() {
+			async function startMetronome() {
 				if (!audioCtx) {
 					audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+					setupAudioStateListener();
 				}
-	
-				if (audioCtx.state === "suspended") {
-					audioCtx.resume();
+
+				const resumed = await tryResume();
+				if (!resumed) {
+					handleAudioBlocked();
+					return;
 				}
 
 				if (isRunning) return;
@@ -230,7 +322,7 @@
 
 				schedulerId = setInterval(scheduler, lookahead);
 				requestWakeLock();
-				updateBtn();
+				updateLayout();
 			}
 
 			function stopMetronome() {
@@ -238,13 +330,64 @@
 				clearInterval(schedulerId);
 				schedulerId = null;
 				releaseWakeLock();
-				updateBtn();
+				updateLayout();
 			}
 			
-			startBtn.addEventListener("click", startMetronome);
-			stopBtn.addEventListener("click", stopMetronome);
-			document.addEventListener("visibilitychange", () => {
-			  if (document.visibilityState === "visible" && isRunning) {
+			async function tryResume() {
+				if (audioCtx.state !== 'suspended') return true;
+				
+				try {
+					await audioCtx.resume();
+					return audioCtx.state === 'running';
+				} catch {
+					return false;
+				}
+			}
+			
+			function updateLayout() {
+				background.classList.toggle("startColor");
+				background.classList.toggle("stopColor");
+					startIcon.classList.toggle("hidden");
+					stopIcon.classList.toggle("hidden");
+					handIcon.classList.toggle("handOn");
+			}
+			
+			switchBtn.addEventListener("click", async () => {
+				if (!audioCtx) {
+					audioCtx = new AudioContext();
+				}
+
+				const ok = await tryResume();
+				if (!ok) {
+					handleAudioBlocked();
+					return;
+				}
+
+				if (isRunning) {
+					stopMetronome();
+				} else {
+					startMetronome();
+				}
+			});
+			
+			function handleAudioBlocked() {
+				stopMetronome();
+				
+				notie.alert({
+					type: 3,
+					text: refreshMsg,
+					position: 'bottom',
+					stay: true
+				});
+			}
+			
+			document.addEventListener("visibilitychange", async () => {
+				if (document.visibilityState === "visible" && isRunning) {
+					const ok = await tryResume();
+					if (!ok) {
+						handleAudioBlocked();
+						return;
+					}
 					requestWakeLock();
 				}
 			});
@@ -284,16 +427,17 @@
 				willClose: () => {
 					clearInterval(volumeIconInterval);
 				},
+				confirmButtonText: "OK",
 				color: "#000000",
 				heightAuto: false,
 				scrollbarPadding: false,
-				showCancelButton: false,
-				showConfirmButton: false,
+				allowOutsideClick: false,
 				timer: 6000
 			});
 		});
 			
 		</script>
 		<script src="https://unpkg.com/notie"></script>
-		</body>
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	</body>
 </html>
